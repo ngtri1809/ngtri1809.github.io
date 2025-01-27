@@ -136,10 +136,14 @@ body {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	min-height: 100vh;
+	min-height: auto;
 	padding: 0 10%;
+	margin-bottom: 10rem;
 }
 
+#main {
+    padding-top: 2rem;
+}
 /* Profile Image */
 .profile-image img {
     width: 300px;
@@ -3519,7 +3523,7 @@ body.is-menu-visible #menu .close {
   .section-title {
 	font-size: 2.5rem;
 	color: var(--text-white);
-	margin-bottom: 3rem;
+	/* margin-bottom: 1rem; */
 	text-align: center;
   }
   
