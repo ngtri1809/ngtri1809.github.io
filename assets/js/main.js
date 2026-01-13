@@ -224,6 +224,110 @@ document.addEventListener('DOMContentLoaded', function() {
             modal.style.display = 'none';
         }
     });
+    
+    // Scroll-triggered animations
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+    
+    const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, observerOptions);
+    
+    // Observe section titles
+    document.querySelectorAll('.section-title').forEach(title => {
+        observer.observe(title);
+    });
+    
+    // Observe tech items with staggered delay
+    document.querySelectorAll('.tech-item').forEach((item, index) => {
+        observer.observe(item);
+        item.style.transitionDelay = `${index * 0.05}s`;
+    });
+    
+    // Observe project tiles with staggered delay
+    document.querySelectorAll('.tiles article').forEach((article, index) => {
+        observer.observe(article);
+        article.style.transitionDelay = `${index * 0.1}s`;
+    });
+    
+    // Typing animation for name
+    const nameElement = document.querySelector('.name');
+    if (nameElement) {
+        const text = nameElement.textContent;
+        nameElement.textContent = '';
+        nameElement.style.borderRight = '2px solid #64ffda';
+        let i = 0;
+        
+        function typeWriter() {
+            if (i < text.length) {
+                nameElement.textContent += text.charAt(i);
+                i++;
+                setTimeout(typeWriter, 100);
+            } else {
+                // Remove cursor after typing completes
+                setTimeout(() => {
+                    nameElement.style.borderRight = 'none';
+                }, 500);
+            }
+        }
+        
+        // Start typing animation after a short delay
+        setTimeout(typeWriter, 500);
+    }
+    
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            const href = this.getAttribute('href');
+            if (href !== '#' && href !== '#menu') {
+                e.preventDefault();
+                const target = document.querySelector(href);
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            }
+        });
+    });
+    
+    // 3D tilt effect for project cards
+    document.querySelectorAll('.tiles article').forEach(card => {
+        card.addEventListener('mousemove', function(e) {
+            const rect = this.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            
+            const rotateX = (y - centerY) / 10;
+            const rotateY = (centerX - x) / 10;
+            
+            this.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-10px)`;
+        });
+        
+        card.addEventListener('mouseleave', function() {
+            this.style.transform = '';
+        });
+    });
+    
+    // Subtle parallax effect for hero section
+    window.addEventListener('scroll', function() {
+        const scrolled = window.pageYOffset;
+        const heroSection = document.querySelector('.hero-section');
+        if (heroSection && scrolled < 500) {
+            heroSection.style.transform = `translateY(${scrolled * 0.2}px)`;
+            heroSection.style.opacity = Math.max(0.3, 1 - (scrolled / 800));
+        }
+    });
 });
 
   
